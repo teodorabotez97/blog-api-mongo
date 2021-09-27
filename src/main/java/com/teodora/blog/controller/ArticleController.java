@@ -41,8 +41,8 @@ public class ArticleController {
         }
     }
     @GetMapping("/articles/{id}")
-    public ResponseEntity<Article> getTutorialById(@PathVariable("id") Integer articleId) {
-        Optional<Article> articleData = articleRepository.findById(articleId);
+    public ResponseEntity<Article> getTutorialById(@PathVariable("id") Integer id) {
+        Optional<Article> articleData = articleRepository.findById(id);
 
         if (articleData.isPresent()) {
             return new ResponseEntity<>(articleData.get(), HttpStatus.OK);
@@ -52,9 +52,9 @@ public class ArticleController {
     }
 
     @DeleteMapping("/articles/{id}")
-    public ResponseEntity<HttpStatus> deleteTutorial(@PathVariable("id") Integer articleId) {
+    public ResponseEntity<HttpStatus> deleteTutorial(@PathVariable("id") Integer id) {
         try {
-            articleRepository.deleteById(articleId);
+            articleRepository.deleteById(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -62,8 +62,8 @@ public class ArticleController {
     }
 
     @PutMapping("/articles/{id}")
-    public ResponseEntity<Article> updateTutorial(@PathVariable("id") Integer articleId, @RequestBody Article updatedArticle) {
-        Optional<Article> articleData = articleRepository.findById(articleId);
+    public ResponseEntity<Article> updateTutorial(@PathVariable("id") Integer id, @RequestBody Article updatedArticle) {
+        Optional<Article> articleData = articleRepository.findById(id);
 
         if (articleData.isPresent()) {
             Article article = articleData.get();
