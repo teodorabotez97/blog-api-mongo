@@ -13,15 +13,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://localhost:8081")
 @RestController
 
 public class ArticleController {
 
     @Autowired
     private ArticleRepository articleRepository;
-    
-    @CrossOrigin(origins = "*")
+
+    @GetMapping("")
+    public String sayHello(){
+        return "Hello!";
+    }
+
     @GetMapping("/articles")
     public ResponseEntity<List<Article>> getAllArticles(@RequestParam(required = false) String title) {
         try {
