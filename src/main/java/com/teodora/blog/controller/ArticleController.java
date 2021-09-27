@@ -98,7 +98,7 @@ public class ArticleController {
     @GetMapping("/searchArticleByTitle")
     public ResponseEntity<List<Article>> getArticleByTitle(@Param("title") String title) {
         try {
-            List<Article> articles = articleRepository.getArticleByTitle(title);
+            List<Article> articles = articleRepository.findByTitleContaining(title);
 
             if (articles.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
