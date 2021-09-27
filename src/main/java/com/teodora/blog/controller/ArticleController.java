@@ -92,12 +92,7 @@ public class ArticleController {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
-    @GetMapping("/searchArticleByAuthor")
-    public List<Article> getArticleByAuthor(@Param("author")String author){
-
-        return articleRepository.getArticleByAuthor(author);
-    }
+    
 
     @GetMapping("/searchArticleByTitle")
     public ResponseEntity<List<Article>> getArticleByTitle(@Param("title") String title) {
@@ -112,22 +107,6 @@ public class ArticleController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    @GetMapping("/searchArticleByTag")
-    public Article getArticleByTag(@Param("tag") String tag){
 
-        return articleRepository.getArticleByTag(tag);
-    }
-
-    @GetMapping("/searchArticleByTitleAndTag")
-    public Article getArticleByTitleAndTag(@Param("title") String title, @Param("tag")  String tag){
-
-        return articleRepository.getArticleByTitleAndTag(title,tag);
-    }
-
-    @GetMapping("/searchArticleByTitleAndAuthor")
-    public Article getArticleByTitleAndAuthor(@Param("title") String title, @Param("author") String author){
-
-        return articleRepository.getArticleByTitleAndAuthor(title,author);
-    }
 
 }
