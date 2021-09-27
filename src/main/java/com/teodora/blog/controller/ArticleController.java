@@ -92,7 +92,7 @@ public class ArticleController {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    
+
 
     @GetMapping("/searchArticleByTitle")
     public ResponseEntity<List<Article>> getArticleByTitle(@Param("title") String title) {

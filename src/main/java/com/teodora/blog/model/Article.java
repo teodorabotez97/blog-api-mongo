@@ -6,9 +6,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import javax.persistence.*;
 import java.sql.Timestamp;
 
-@Entity
+
 @Document(collection = "article")
-@EntityListeners(AuditingEntityListener.class)
+
 public class Article implements java.io.Serializable {
     private static final long serialVersionUID = 1L;
     @Id
