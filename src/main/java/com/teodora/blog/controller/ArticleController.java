@@ -20,7 +20,8 @@ public class ArticleController {
 
     @Autowired
     private ArticleRepository articleRepository;
-
+    
+    @CrossOrigin(origins = "*")
     @GetMapping("/articles")
     public ResponseEntity<List<Article>> getAllArticles(@RequestParam(required = false) String title) {
         try {
