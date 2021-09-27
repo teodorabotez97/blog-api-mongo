@@ -8,8 +8,8 @@ import java.util.List;
 
 
 public interface ArticleRepository extends MongoRepository<Article, Integer> {
-    List<Article> findByTitleContaining(String title);
 
+    @Query("{'title': ?0}")
     List<Article> getArticleByTitle(String title);
 
 }
