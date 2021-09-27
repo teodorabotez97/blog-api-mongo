@@ -6,7 +6,6 @@ import org.springframework.data.mongodb.repository.Query;
 
 import java.util.List;
 
-
 public interface ArticleRepository extends MongoRepository<Article, Integer> {
 
     @Query("{'title': ?0}")
@@ -16,11 +15,11 @@ public interface ArticleRepository extends MongoRepository<Article, Integer> {
     List<Article> getArticleByAuthor(String author);
 
     @Query("{'tag': ?0}")
-    Article getArticleByTag(String tag);
+    List<Article> getArticleByTag(String tag);
 
     @Query("{'title': ?0 , 'tag': ?1}")
-    Article getArticleByTitleAndTag(String title, String tag);
+    List<Article> getArticleByTitleAndTag(String title, String tag);
 
     @Query("{'title': ?0 , 'author': ?1}")
-    Article getArticleByTitleAndAuthor(String title, String author);
+    List<Article> getArticleByTitleAndAuthor(String title, String author);
 }

@@ -34,7 +34,7 @@ public class ArticleController {
             if (title == null)
                 articleRepository.findAll().forEach(tutorials::add);
             else
-                articleRepository.findByTitleContaining(title).forEach(tutorials::add);
+                articleRepository.getArticleByTitle(title).forEach(tutorials::add);
 
             if (tutorials.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -98,7 +98,7 @@ public class ArticleController {
     @GetMapping("/searchArticleByTitle")
     public ResponseEntity<List<Article>> getArticleByTitle(@Param("title") String title) {
         try {
-            List<Article> articles = articleRepository.findByTitleContaining(title);
+            List<Article> articles = articleRepository.getArticleByTitle(title);
 
             if (articles.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -108,6 +108,57 @@ public class ArticleController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    @GetMapping("/searchArticleByAuthor")
+    public ResponseEntity<List<Article>> getArticleByAuthor(@Param("author") String author) {
+        try {
+            List<Article> articles = articleRepository.getArticleByAuthor(author);
 
+            if (articles.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            return new ResponseEntity<>(articles, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @GetMapping("/searchArticleByTag")
+    public ResponseEntity<List<Article>> getArticleByTag(@Param("tag") String tag) {
+        try {
+            List<Article> articles = articleRepository.getArticleByTag(tag);
+
+            if (articles.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            return new ResponseEntity<>(articles, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @GetMapping("/searchArticleByTitleAndTag")
+    public ResponseEntity<List<Article>> getArticleByTitleAndTag(@Param("title") String title, @Param("tag")  String tag) {
+        try {
+            List<Article> articles = articleRepository.getArticleByTitleAndTag(title,tag);
+
+            if (articles.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            return new ResponseEntity<>(articles, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @GetMapping("/searchArticleByTitleAndAuthor")
+    public ResponseEntity<List<Article>> getArticleByTitleAndAuthor(@Param("title") String title, @Param("author")  String author) {
+        try {
+            List<Article> articles = articleRepository.getArticleByTitleAndAuthor(title,author);
+
+            if (articles.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            return new ResponseEntity<>(articles, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
 }
