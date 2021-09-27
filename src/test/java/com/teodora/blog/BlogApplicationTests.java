@@ -22,11 +22,6 @@ class BlogApplicationTests {
 	void contextLoads() {
 	}
 
-	@Test
-	public void getAllArticles() {
-		List<Article> article2 = articleController.getAllArticles();
-		List<Article> article = articleRepository.findAll();
-		assertThat(article2.equals(article));
-	}
+
 
 }

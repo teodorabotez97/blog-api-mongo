@@ -1,39 +1,31 @@
 package com.teodora.blog.model;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "articles")
+@Document(collection = "article")
 @EntityListeners(AuditingEntityListener.class)
 public class Article implements java.io.Serializable {
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private Integer id;
 
-    @Column(name = "title")
     private String title;
 
-    @Column(name = "tag")
     private String tag;
 
-    @Column(name = "author")
     private String author;
 
-    @Column(name = "date")
     private String date;
 
-    @Column(name = "img_url")
     private String imgUrl;
 
-    @Column(name = "content")
     private String content;
 
-    @Column(name = "date_timestamp")
     private Timestamp dateTimestamp;
 
 

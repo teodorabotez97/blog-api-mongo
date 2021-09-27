@@ -5,9 +5,13 @@ import com.teodora.blog.model.Article;
 import com.teodora.blog.repository.ArticleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -21,76 +25,105 @@ public class ArticleController {
         return "Hello";
     }
 
-    @CrossOrigin(origins = "*")
     @GetMapping("/articles")
-    public List<Article> getAllArticles(){
-        return articleRepository.findAll();
-    }
+    public ResponseEntity<List<Article>> getAllArticles(@RequestParam(required = false) String title) {
+        try {
+            List<Article> tutorials = new ArrayList<Article>();
 
-    @CrossOrigin(origins = "*")
+            if (title == null)
+                articleRepository.findAll().forEach(tutorials::add);
+            else
+                articleRepository.findByTitleContaining(title).forEach(tutorials::add);
+
+            if (tutorials.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+
+            return new ResponseEntity<>(tutorials, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
     @GetMapping("/articles/{id}")
-    public ResponseEntity<Article> getArticlesById(@PathVariable(value = "id") Integer articleId)
-      throws ArticleNotFoundException {
-        Article article =articleRepository
-                            .findById(articleId)
-                            .orElseThrow(() -> new ArticleNotFoundException(articleId));
-            return ResponseEntity.ok().body(article);
+    public ResponseEntity<Article> getTutorialById(@PathVariable("id") Integer articleId) {
+        Optional<Article> articleData = articleRepository.findById(articleId);
+
+        if (articleData.isPresent()) {
+            return new ResponseEntity<>(articleData.get(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
-    @CrossOrigin(origins = "*")
     @DeleteMapping("/articles/{id}")
-    public void deleteEArticle(@PathVariable(value = "id") Integer articleId) {
-        articleRepository.deleteById(articleId);
+    public ResponseEntity<HttpStatus> deleteTutorial(@PathVariable("id") Integer articleId) {
+        try {
+            articleRepository.deleteById(articleId);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
-    @CrossOrigin(origins = "*")
     @PutMapping("/articles/{id}")
-    public Article updateArticle(@PathVariable(value = "id") Integer articleId, @RequestBody Article articleDetails)
-            throws ArticleNotFoundException {
+    public ResponseEntity<Article> updateTutorial(@PathVariable("id") Integer articleId, @RequestBody Article updatedArticle) {
+        Optional<Article> articleData = articleRepository.findById(articleId);
 
-        Article article = articleRepository.findById(articleId)
-                .orElseThrow(() -> new ArticleNotFoundException(articleId));
-        article.setTitle(articleDetails.getTitle());
-        article.setTag(articleDetails.getTag());
-        article.setAuthor(articleDetails.getAuthor());
-        article.setDate(articleDetails.getDate());
-        article.setImgUrl(articleDetails.getImgUrl());
-        article.setContent(articleDetails.getContent());
-        return articleRepository.save(article);
+        if (articleData.isPresent()) {
+            Article article = articleData.get();
+            article.setTitle(updatedArticle.getTitle());
+            article.setTag(updatedArticle.getTag());
+            article.setAuthor(updatedArticle.getAuthor());
+            article.setDate(updatedArticle.getDate());
+
+            return new ResponseEntity<>(articleRepository.save(article), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
-    @CrossOrigin(origins = "*")
     @PostMapping("/articles")
-    public Article newArticle(@RequestBody Article newArticle){
-        return articleRepository.save(newArticle);
+    public ResponseEntity<Article> createArticle(@RequestBody Article article) {
+        try {
+            Article _article = articleRepository.save(new Article(article.getId(),article.getTitle(), article.getTag(),article.getAuthor(),
+                    article.getDate(),article.getImgUrl(),article.getContent(),article.getDateTimestamp()));
+            return new ResponseEntity<>(_article, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
-    @CrossOrigin(origins = "*")
     @GetMapping("/searchArticleByAuthor")
     public List<Article> getArticleByAuthor(@Param("author")String author){
 
         return articleRepository.getArticleByAuthor(author);
     }
-    @CrossOrigin(origins = "*")
-    @GetMapping("/searchArticleByTitle")
-    public Article getArticleByTitle(@Param("title") String title){
-        return articleRepository.getArticleByTitle(title); }
 
-    @CrossOrigin(origins = "*")
+    @GetMapping("/searchArticleByTitle")
+    public ResponseEntity<List<Article>> getArticleByTitle(@Param("title") String title) {
+        try {
+            List<Article> articles = articleRepository.getArticleByTitle(title);
+
+            if (articles.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            return new ResponseEntity<>(articles, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
     @GetMapping("/searchArticleByTag")
     public Article getArticleByTag(@Param("tag") String tag){
 
         return articleRepository.getArticleByTag(tag);
     }
 
-    @CrossOrigin(origins = "*")
     @GetMapping("/searchArticleByTitleAndTag")
     public Article getArticleByTitleAndTag(@Param("title") String title, @Param("tag")  String tag){
 
         return articleRepository.getArticleByTitleAndTag(title,tag);
     }
 
-    @CrossOrigin(origins = "*")
     @GetMapping("/searchArticleByTitleAndAuthor")
     public Article getArticleByTitleAndAuthor(@Param("title") String title, @Param("author") String author){
 
