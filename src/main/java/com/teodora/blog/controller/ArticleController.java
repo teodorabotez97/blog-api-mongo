@@ -15,15 +15,11 @@ import java.util.Optional;
 
 @CrossOrigin(origins = "*")
 @RestController
+
 public class ArticleController {
 
     @Autowired
     private ArticleRepository articleRepository;
-
-    @GetMapping
-    public String displayHello(){
-        return "Hello";
-    }
 
     @GetMapping("/articles")
     public ResponseEntity<List<Article>> getAllArticles(@RequestParam(required = false) String title) {
