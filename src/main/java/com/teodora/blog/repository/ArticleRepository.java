@@ -12,4 +12,15 @@ public interface ArticleRepository extends MongoRepository<Article, Integer> {
     @Query("{'title': ?0}")
     List<Article> getArticleByTitle(String title);
 
+    @Query("{'author': ?0}")
+    List<Article> getArticleByAuthor(String author);
+
+    @Query("{'tag': ?0}")
+    Article getArticleByTag(String tag);
+
+    @Query("{'title': ?0 , 'tag': ?1}")
+    Article getArticleByTitleAndTag(String title, String tag);
+
+    @Query("{'title': ?0 , 'author': ?1}")
+    Article getArticleByTitleAndAuthor(String title, String author);
 }
